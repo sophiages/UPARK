@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Web3 Metamask Login</title>
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+
+<body>
+    <div class="text-center">
+        <br />
+        <br />
+        <br />
+        <h1 style="font-size:60px;">UPARK</h1>
+        <p>
+            <h2 style="font-size:20px;">The newest hassle free way to park your car!</h2>
+            
+        </p>
+        <br />
+        <br />
+        <br />
+        <div class="flex-col space-y-2 justify-center items-center">
+            <div class="text-center">
+                <style>
+                    body {
+                        background-image: url("bg3.png"), url("bg1.jpg");
+                        background-color: #a3a3a3;
+                    }
+                </style>
+
+                <h4> BUY PARKCOIN: </h4>
+                <br/>
+                <section id="content2">
+                    <form onsubmit="return false;">
+                        <input type="number" min="0" id="aantalTokens" placeholder="Amount of ParkCoins">
+                        <button id="buyBtn">Buy</button>
+                    </form>
+                </section>
+
+                <br />
+                <br />
+                <br />
+                <h4> RENT A PARKING SPOT: </h4>
+                <br/>
+                <form onsubmit="return false;">
+                    <select id="floor">
+                        <option id="1" value="0">Floor 1</option>
+                        <option id="2" value="1">Floor 2</option>
+                        <option id="3" value="2">Floor 3</option>
+                        <option id="4" value="3">Floor 4</option>
+                        <option id="5" value="4">Floor 5</option>
+                        <option id="6" value="5">Floor 6</option>
+                    </select>
+                    <input type="date">
+                    <input type="text" placeholder="License plate" id="licenseplate" required="">
+                    <input type="number" min="1" max="" placeholder="Amount of ParkCoins" id="payedTokens">
+                    <button id='loginButton' onclick="" class="mx-auto rounded-md p-2 bg-purple-500 text-white">
+                        Login with MetaMask
+                    </button>
+                    <p id='userWallet' class='text-lg text-gray-600 my-2'></p>
+            </div>
+
+            <script>
+                window.userWalletAddress = null
+                const loginButton = document.getElementById('loginButton')
+                const userWallet = document.getElementById('userWallet')
+
+                function toggleButton() {
+                    if (!window.ethereum) {
+                        loginButton.innerText = 'MetaMask is not installed'
+                        loginButton.classList.remove('bg-purple-500', 'text-white')
+                        loginButton.classList.add('bg-gray-500', 'text-gray-100', 'cursor-not-allowed')
+                        return false
+                    }
+
+                    loginButton.addEventListener('click', loginWithMetaMask)
+                }
+
+                async function loginWithMetaMask() {
+                    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' })
+                        .catch((e) => {
+                            console.error(e.message)
+                            return
+                        })
+                    if (!accounts) { return }
+
+                    window.userWalletAddress = accounts[0]
+                    userWallet.innerText = window.userWalletAddress
+                    loginButton.innerText = 'Sign out of MetaMask'
+
+                    loginButton.removeEventListener('click', loginWithMetaMask)
+                    setTimeout(() => {
+                        loginButton.addEventListener('click', signOutOfMetaMask)
+                    }, 200)
+                }
+
+                function signOutOfMetaMask() {
+                    window.userWalletAddress = null
+                    userWallet.innerText = ''
+                    loginButton.innerText = 'Sign in with MetaMask'
+
+                    loginButton.removeEventListener('click', signOutOfMetaMask)
+                    setTimeout(() => {
+                        loginButton.addEventListener('click', loginWithMetaMask)
+                    }, 200)
+                }
+
+                window.addEventListener('DOMContentLoaded', () => {
+                    toggleButton()
+                });
+            </script>
+</body>
+
+</html>
